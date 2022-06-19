@@ -76,7 +76,7 @@ Vector2i TextBox::preferred_size(NVGcontext *ctx) const {
     }
 
     float ts = nvgTextBounds(ctx, 0, 0, m_value.c_str(), nullptr, nullptr);
-    size[0] = size[1] + ts + uw + sw;
+    size[0] = size[1] + (ts + uw + sw) * 1.2f;
     return size;
 }
 
@@ -189,7 +189,10 @@ void TextBox::draw(NVGcontext* ctx) {
             break;
         case Alignment::Center:
             nvgTextAlign(ctx, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE);
-            draw_pos.x() += m_size.x() * 0.5f;
+            if (unit_width > 0)
+                draw_pos.x() += (m_size.x() - unit_width - x_spacing) * 0.5f;
+            else
+                draw_pos.x() += m_size.x() * 0.5f;            
             break;
     }
 
